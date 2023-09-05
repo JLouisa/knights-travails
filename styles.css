@@ -31,7 +31,7 @@ footer {
 .main {
   grid-area: 2/1/3/2;
   display: grid;
-  grid-template: 680px / 1fr 680px 1fr;
+  grid-template: 656px / 1fr 656px 1fr;
 }
 
 footer {
@@ -60,15 +60,24 @@ footer {
   display: flex;
   flex-wrap: wrap;
   flex: auto;
-  width: 680px;
-  height: 680px;
+  width: 656px;
+  height: 656px;
 }
 
-.chessboard div {
-  min-height: 80px;
-  min-width: 80px;
+/* .chessboard div:nth-child(8n + 1) {
+  background-color: rgba(0, 0, 0, 0.764);
+  border: 1px solid white;
+} */
+
+.box {
   border: 1px solid black;
-  flex-grow: 2;
+
+  min-height: 80px;
+  max-height: 80px;
+  min-width: 80px;
+  max-width: 80px;
+  flex-basis: 80px;
+  display: flex;
   justify-content: center;
   align-items: center;
 }
