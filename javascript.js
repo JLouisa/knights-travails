@@ -135,12 +135,3 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
   }
 };
 prettyPrint(chessBoard.root);
-
-// Starting point and Destination Input
-// All stops to and including Starting point & Destination Output
-// Every node === a position on the board
-// Every child node === a valid move for the Knight
-// Valid moves === 1 + 2 <= 7,7 || 2 + 1 <= 7,7 || 2 - 1 >= 0,0 || 1 - 2 >= 0,0
-// Root of tree is starting point of Knight
-// Legal moves: 0.0 <= 1.2 + 2.1 + 0.8 + 1.9 >= 7.7
-// 6 branches, but need to avoid infinite
