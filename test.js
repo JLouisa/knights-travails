@@ -56,6 +56,28 @@ Node = {
 }
 */
 
+const coorXY = [0, 1, 2, 3, 4, 5, 6, 7];
+
 const nextPosX1Func = (pos) => {
   pos;
 };
+
+//! Compare coordinates
+const coor1 = [0, 0];
+const coor2 = [0, 1];
+console.log(coor1[0] === coor2[0] && coor1[1] === coor2[1]);
+
+//! Create gameBoard
+const createBoard = (arrXY) => {
+  let newArr = [];
+  arrXY.forEach((elementX) => {
+    arrXY.forEach((elementY) => {
+      let node = [elementX, elementY];
+      newArr.push(node);
+    });
+  });
+  return newArr;
+};
+
+const board = createBoard(coorXY);
+console.log(board);
