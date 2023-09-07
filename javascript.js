@@ -19,27 +19,27 @@
 // }
 // theKnight();
 
-// //! Create Class
-// class Pieces {
-//   constructor(name) {
-//     this.name = name;
-//     this.position = position;
-//   }
-// }
+//! Create Class
+class Pieces {
+  constructor(name) {
+    this.name = name;
+    this.position = position;
+  }
+}
 
-// class chessBoard {
-//   constructor(arrXY) {
-//     this.root = "Head";
-//   }
-//   createBoard(arrX, arrY) {
-//     arrX.array.forEach((elementX) => {
-//       arrY.forEach((elementY) => {
-//         let node = [elementX, elementY];
-//         this.root = node;
-//       });
-//     });
-//   }
-// }
+class chessBoard {
+  constructor(arrXY) {
+    this.root = "Head";
+  }
+  createBoard(arrX, arrY) {
+    arrX.array.forEach((elementX) => {
+      arrY.forEach((elementY) => {
+        let node = [elementX, elementY];
+        this.root = node;
+      });
+    });
+  }
+}
 
 // const gameBoardDown = (x, y) => {
 //   if (x < 0 || x > 7) return;
