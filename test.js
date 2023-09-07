@@ -44,28 +44,62 @@ y = +1x / +2y
 Node = {
     coor: 1.2,
     savedPiece: none,
-    nextPosX1: 1.2,  (+2.1)
-    nextPosX2: null, (+1.9)
-    nextNegX1: null, (-1.9)
-    nextNegX2: null, (-2.1)
-    nextPosY1: 2.1,  (+1.2)
-    nextPosY2: null, (-0.8)
-    nextNegY1: null, (+0.8)
-    nextNegY2: null, (-1.2)
+    nextPosX1: 1.2,  (+2, +1)
+    nextPosX2: null, (+2, -1)
+    nextPosY1: 2.1,  (+1, +2)
+    nextPosY2: null, (-1, +2)
+    nextNegY1: null, (+1, -2)
+    nextNegX1: null, (-2, +1)
+    nextNegX2: null, (-2, -1)
+    nextNegY2: null, (-1, -2)
     previous: 0.0,
 }
 */
 
+class Node {
+  constuctor(coord) {
+    (this.coord = coord),
+      (savedPiece = "none"),
+      (nextPosX1 = nextCoorFunc(pos, posX1)),
+      (nextPosX2 = nextCoorFunc(pos, posX2)),
+      (nextPosY1 = nextCoorFunc(pos, posY1)),
+      (nextPosY2 = nextCoorFunc(pos, posY2)),
+      (nextNegY1 = nextCoorFunc(pos, negY1)),
+      (nextNegX1 = nextCoorFunc(pos, negX1)),
+      (nextNegX2 = nextCoorFunc(pos, NegX2)),
+      (nextNegY2 = nextCoorFunc(pos, negY2)),
+      (previous = null);
+  }
+}
+
+//! Gameboard Coordinates
 const coorXY = [0, 1, 2, 3, 4, 5, 6, 7];
 
-const nextPosX1Func = (pos) => {
-  pos;
+//! Delta neighbour Coordinates
+const posX1 = [2, 1];
+const posX2 = [2, -1];
+const posY1 = [1, 2];
+const posY2 = [-1, 2];
+const negX1 = [-2, 1];
+const negY1 = [1, -2];
+const NegX2 = [-2, -1];
+const negY2 = [-1, -2];
+
+//! Create Positive Coordinate
+const nextCoorFunc = (pos, deltaXY) => {
+  const newPos = [pos[0] + deltaXY[0], pos[1] + deltaXY[1]];
+  if (newPos[0] < 0 || newPos[0] > 7 || newPos[1] < 0 || newPos[1] > 7) {
+    //Do nothing
+    return null;
+  } else {
+    return newPos;
+  }
 };
 
-//! Compare coordinates
-const coor1 = [0, 0];
-const coor2 = [0, 1];
-console.log(coor1[0] === coor2[0] && coor1[1] === coor2[1]);
+//* Compare coordinates
+// const coor1 = [0, 0];
+// const coor2 = [0, 1];
+// coor1[0] === coor2[0] && coor1[1] === coor2[1];
 
 //! Create gameBoard
 const createBoard = (arrXY) => {
@@ -78,6 +112,4 @@ const createBoard = (arrXY) => {
   });
   return newArr;
 };
-
 const board = createBoard(coorXY);
-console.log(board);
