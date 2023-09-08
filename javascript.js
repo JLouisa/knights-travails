@@ -257,10 +257,15 @@ let garbageArr = [];
 
 const knightMoves = (root, dist) => {
   let movesArr = [];
-  theDirtyWork(root, dist, movesArr);
+  return theDirtyWork(root, dist, movesArr);
 };
 
 function theDirtyWork(_root, _dist, _movesArr) {
+  if (findArray(_root, garbageArr)) {
+    return "In Garbage";
+  } else {
+    garbageArr.push(_root);
+  }
   if (findArray(_dist, _movesArr)) {
     _movesArr.push(_root);
     return _movesArr;
@@ -268,11 +273,6 @@ function theDirtyWork(_root, _dist, _movesArr) {
   if (compareCoor(_root, _dist)) {
     _movesArr.push(_dist);
     return _movesArr;
-  }
-  if (findArray(_root, garbageArr)) {
-    return "In Garbage";
-  } else {
-    garbageArr.push(_root);
   }
   console.log(`garbageArr:`);
   console.log(garbageArr);
@@ -284,9 +284,10 @@ function theDirtyWork(_root, _dist, _movesArr) {
     if (theList[key] !== null) {
       console.log("the next Key:");
       console.log(theList[key]);
-      return theDirtyWork(theList[key], _dist, _movesArr);
+      theDirtyWork(theList[key], _dist, _movesArr);
     }
   }
+  return _movesArr; // Return the _movesArr after the loop finishes
 }
 
 console.log(knightMoves([0, 0], [1, 2]));
