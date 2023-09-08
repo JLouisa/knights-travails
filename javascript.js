@@ -120,10 +120,8 @@ const compareCoor = (coor1, coor2) => {
 //! This is to compare and traverse the tree easier (arg1 > arg2)
 const biggerCoord = (coor1, coor2) => {
   if (coor1[0] > coor2[0]) {
-    console.log(`Bigger path 1`);
     return true;
   } else if (coor1[0] < coor2[0]) {
-    console.log(`Smaller path 1`);
     return false;
   } else if (coor1[0] === coor2[0]) {
     if (coor1[1] > coor2[1]) {
@@ -165,18 +163,12 @@ class GameBoard {
     if (root === null) {
       return null;
     }
-    console.log("crd:");
-    console.log(crd);
-    console.log("root:");
-    console.log(root.coord);
     if (compareCoor(root.coord, crd)) {
       return root.nextMoves;
     }
     if (biggerCoord(crd, root.coord)) {
-      console.log("It's bigger");
       return this.find(root.rightNode, crd);
     } else {
-      console.log("It's smaller");
       return this.find(root.leftNode, crd);
     }
   }
@@ -244,25 +236,35 @@ const boardCoords = [...createGameCoord(coorXY)];
 const linkedBoard = new GameBoard(boardCoords);
 console.log(linkedBoard);
 
-console.log(compareCoor([3, 5], [3, 5]));
+// console.log(compareCoor([3, 5], [3, 5]));
 
 prettyPrint(linkedBoard.root);
-console.log(linkedBoard.find(linkedBoard.root, [2, 5]));
-console.log(biggerCoord(linkedBoard.root, [2, 5]));
-// const headNode = new Node(boardCoords[27]);
-// console.log(headNode);
 
-// console.log((test = new Node([2, 1])));
+const list = linkedBoard.find(linkedBoard.root, [7, 7]);
 
-// console.log("compare vv");
-// console.log(`35: ${boardCoords[35]}`);
-// console.log(`17: ${boardCoords[17]}`);
-// console.log(biggerCoord(boardCoords[35], boardCoords[17]));
-// console.log(biggerCoord(boardCoords[20], boardCoords[41]));
-// console.log(biggerCoord([1, 5], [1, 7]));
-// console.log(biggerCoord(boardCoords[50], boardCoords[50]));
+console.log(list);
+for (let key in list) {
+  if (list[key] !== null) console.log(list[key].join(""));
+}
+
+let shortArr = [];
 
 //! knight Moves
 const knightMoves = (root, dist) => {
-  root > dist;
+  let arrMoves = [];
+  const nextMovesList = linkedBoard.find(linkedBoard.root, root);
+  for (const key in nextMovesList) {
+    if (nextMovesList[key] !== null) {
+      lookUpMoves(nextMovesList[key], arrMoves, dist);
+    }
+  }
 };
+
+function lookUpMoves(coord, arr, dis) {
+  if (arr.includes(coord.join(""))) {
+    return;
+  } else {
+    arr.push(coord.join(""));
+  }
+  const nextMovesList2 = linkedBoard.find(linkedBoard.root, root);
+}
