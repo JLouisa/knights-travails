@@ -139,11 +139,11 @@ class Node {
 //! Create gameBoard
 class GameBoard {
   constructor(arr) {
-    this.root = "Head";
+    this.coor = "Head";
     this.leftNode = null;
     this.rightNode = null;
     this.prevNode = null;
-    this.coor = this.createChessBlocks(arr);
+    this.root = buildTree(arr, 0, arr.length - 1);
   }
 }
 
@@ -191,26 +191,26 @@ function calcNextCoord(pos, deltaXY) {
   return newPos[0] < 0 || newPos[0] > 7 || newPos[1] < 0 || newPos[1] > 7 ? null : newPos;
 }
 
-const boardCoords = [...createGameCoord(coorXY)];
-// const linkedBoard = buildTree(boardCoords, 0, boardCoords.length - 1);
-// console.log(linkedBoard);
-
-const headNode = new Node(boardCoords[27]);
-console.log(headNode);
-
-// console.log((test = new Node([2, 1])));
-
 //! Visualize the tree in the console
 const prettyPrint = (node, prefix = "", isLeft = true) => {
   if (node === null) {
     return;
   }
-  if (node.right !== null) {
+  if (node.rightNode !== null) {
     prettyPrint(node.rightNode, `${prefix}${isLeft ? "│   " : "    "}`, false);
   }
-  console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.data}`);
-  if (node.left !== null) {
+  console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.coord}`);
+  if (node.leftNode !== null) {
     prettyPrint(node.leftNode, `${prefix}${isLeft ? "    " : "│   "}`, true);
   }
 };
-prettyPrint(chessBoard.root);
+
+const boardCoords = [...createGameCoord(coorXY)];
+const linkedBoard = new GameBoard(boardCoords);
+console.log(linkedBoard);
+
+prettyPrint(linkedBoard.root);
+// const headNode = new Node(boardCoords[27]);
+// console.log(headNode);
+
+// console.log((test = new Node([2, 1])));
