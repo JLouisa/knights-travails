@@ -54,27 +54,31 @@ Node = {
     nextNegY2: null, (-1, -2)
     previous: 0.0,
 }
-
-//* Compare coordinates
-const coor1 = [0, 0];
-const coor2 = [0, 1];
-coor1[0] === coor2[0] && coor1[1] === coor2[1];
 */
+
+//! Compare coordinates
+const compareCoor = (coor1, coor2) => {
+  return coor1[0] === coor2[0] && coor1[1] === coor2[1];
+};
 
 //! Create gameBoard Coordinate
 class Node {
-  constuctor(coord) {
-    (this.coord = coord),
-      (savedPiece = null),
-      (nextPosX1 = calcNextCoord(coord, posX1)),
-      (nextPosX2 = calcNextCoord(coord, posX2)),
-      (nextPosY1 = calcNextCoord(coord, posY1)),
-      (nextPosY2 = calcNextCoord(coord, posY2)),
-      (nextNegX1 = calcNextCoord(coord, negX1)),
-      (nextNegX2 = calcNextCoord(coord, NegX2)),
-      (nextNegY1 = calcNextCoord(coord, negY1)),
-      (nextNegY2 = calcNextCoord(coord, negY2)),
-      (previous = null);
+  constructor(coord) {
+    this.coord = coord;
+    this.savedPiece = null;
+    this.leftNode = null;
+    this.rightNode = null;
+    this.prevNode = null;
+    this.nextMoves = {
+      nextPosX1: calcNextCoord(coord, posX1),
+      nextPosX2: calcNextCoord(coord, posX2),
+      nextPosY1: calcNextCoord(coord, posY1),
+      nextPosY2: calcNextCoord(coord, posY2),
+      nextNegX1: calcNextCoord(coord, negX1),
+      nextNegX2: calcNextCoord(coord, negX2),
+      nextNegY1: calcNextCoord(coord, negY1),
+      nextNegY2: calcNextCoord(coord, negY2),
+    };
   }
 }
 
@@ -82,17 +86,35 @@ class Node {
 class GameBoard {
   constructor(arr) {
     this.root = "Head";
-    this.coor = this.createBoard(arr);
+    this.leftNode = null;
+    this.rightNode = null;
+    this.prevNode = null;
+    this.coor = this.createChessBlocks(arr);
   }
-  createBoard(arrXY) {
-    let newArr = [];
-    arrXY.forEach((elementX) => {
-      arrXY.forEach((elementY) => {
-        let node = [elementX, elementY];
-        newArr.push(node);
-      });
+}
+
+//! Create coordinate Array
+const createGameCoord = (arrXY) => {
+  let newArr = [];
+  arrXY.forEach((coordX) => {
+    arrXY.forEach((coordY) => {
+      let nodeXY = [coordX, coordY];
+      newArr.push(nodeXY);
     });
-    return newArr;
+  });
+  return newArr;
+};
+
+//! Build BST
+function buildTree(arr, beginIndex, lastIndex) {
+  if (beginIndex > lastIndex) {
+    return null;
+  } else {
+    const mid = Number(Math.floor((beginIndex + lastIndex) / 2));
+    const node = new Node(arr[mid]);
+    node.leftNode = buildTree(arr, beginIndex, mid - 1);
+    node.rightNode = buildTree(arr, mid + 1, lastIndex);
+    return node;
   }
 }
 
@@ -106,7 +128,7 @@ const posY1 = [1, 2];
 const posY2 = [-1, 2];
 const negX1 = [-2, 1];
 const negY1 = [1, -2];
-const NegX2 = [-2, -1];
+const negX2 = [-2, -1];
 const negY2 = [-1, -2];
 
 //! Calculate Next Coordinate
@@ -115,4 +137,11 @@ function calcNextCoord(pos, deltaXY) {
   return newPos[0] < 0 || newPos[0] > 7 || newPos[1] < 0 || newPos[1] > 7 ? null : newPos;
 }
 
-const board = createBoard(coorXY);
+const boardCoords = [...createGameCoord(coorXY)];
+// const linkedBoard = buildTree(boardCoords, 0, boardCoords.length - 1);
+// console.log(linkedBoard);
+
+const headNode = new Node(boardCoords[27]);
+console.log(headNode);
+
+// console.log((test = new Node([2, 1])));
