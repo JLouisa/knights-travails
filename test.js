@@ -54,21 +54,45 @@ Node = {
     nextNegY2: null, (-1, -2)
     previous: 0.0,
 }
+
+//* Compare coordinates
+const coor1 = [0, 0];
+const coor2 = [0, 1];
+coor1[0] === coor2[0] && coor1[1] === coor2[1];
 */
 
+//! Create gameBoard Coordinate
 class Node {
   constuctor(coord) {
     (this.coord = coord),
-      (savedPiece = "none"),
-      (nextPosX1 = nextCoorFunc(pos, posX1)),
-      (nextPosX2 = nextCoorFunc(pos, posX2)),
-      (nextPosY1 = nextCoorFunc(pos, posY1)),
-      (nextPosY2 = nextCoorFunc(pos, posY2)),
-      (nextNegY1 = nextCoorFunc(pos, negY1)),
-      (nextNegX1 = nextCoorFunc(pos, negX1)),
-      (nextNegX2 = nextCoorFunc(pos, NegX2)),
-      (nextNegY2 = nextCoorFunc(pos, negY2)),
+      (savedPiece = null),
+      (nextPosX1 = calcNextCoord(coord, posX1)),
+      (nextPosX2 = calcNextCoord(coord, posX2)),
+      (nextPosY1 = calcNextCoord(coord, posY1)),
+      (nextPosY2 = calcNextCoord(coord, posY2)),
+      (nextNegX1 = calcNextCoord(coord, negX1)),
+      (nextNegX2 = calcNextCoord(coord, NegX2)),
+      (nextNegY1 = calcNextCoord(coord, negY1)),
+      (nextNegY2 = calcNextCoord(coord, negY2)),
       (previous = null);
+  }
+}
+
+//! Create gameBoard
+class GameBoard {
+  constructor(arr) {
+    this.root = "Head";
+    this.coor = this.createBoard(arr);
+  }
+  createBoard(arrXY) {
+    let newArr = [];
+    arrXY.forEach((elementX) => {
+      arrXY.forEach((elementY) => {
+        let node = [elementX, elementY];
+        newArr.push(node);
+      });
+    });
+    return newArr;
   }
 }
 
@@ -85,31 +109,10 @@ const negY1 = [1, -2];
 const NegX2 = [-2, -1];
 const negY2 = [-1, -2];
 
-//! Create Positive Coordinate
-const nextCoorFunc = (pos, deltaXY) => {
+//! Calculate Next Coordinate
+function calcNextCoord(pos, deltaXY) {
   const newPos = [pos[0] + deltaXY[0], pos[1] + deltaXY[1]];
-  if (newPos[0] < 0 || newPos[0] > 7 || newPos[1] < 0 || newPos[1] > 7) {
-    //Do nothing
-    return null;
-  } else {
-    return newPos;
-  }
-};
+  return newPos[0] < 0 || newPos[0] > 7 || newPos[1] < 0 || newPos[1] > 7 ? null : newPos;
+}
 
-//* Compare coordinates
-// const coor1 = [0, 0];
-// const coor2 = [0, 1];
-// coor1[0] === coor2[0] && coor1[1] === coor2[1];
-
-//! Create gameBoard
-const createBoard = (arrXY) => {
-  let newArr = [];
-  arrXY.forEach((elementX) => {
-    arrXY.forEach((elementY) => {
-      let node = [elementX, elementY];
-      newArr.push(node);
-    });
-  });
-  return newArr;
-};
 const board = createBoard(coorXY);
