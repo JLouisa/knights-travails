@@ -164,7 +164,7 @@ class GameBoard {
       return null;
     }
     if (compareCoor(root.coord, crd)) {
-      return root.nextMoves;
+      return root;
     }
     if (biggerCoord(crd, root.coord)) {
       return this.find(root.rightNode, crd);
@@ -236,35 +236,57 @@ const boardCoords = [...createGameCoord(coorXY)];
 const linkedBoard = new GameBoard(boardCoords);
 console.log(linkedBoard);
 
-// console.log(compareCoor([3, 5], [3, 5]));
-
 prettyPrint(linkedBoard.root);
-
-const list = linkedBoard.find(linkedBoard.root, [7, 7]);
-
+const list = linkedBoard.find(linkedBoard.root, [0, 0]);
 console.log(list);
-for (let key in list) {
-  if (list[key] !== null) console.log(list[key].join(""));
-}
 
-let shortArr = [];
+function findArray(find, list) {
+  const exists = list.some((item) => JSON.stringify(item) === JSON.stringify(find));
+  if (exists) {
+    console.log("Array exists in the list.");
+    return true;
+  } else {
+    console.log("Array does not exist in the list.");
+    return false;
+  }
+}
 
 //! knight Moves
+let shortArr = [];
+let garbageArr = [];
+
 const knightMoves = (root, dist) => {
-  let arrMoves = [];
-  const nextMovesList = linkedBoard.find(linkedBoard.root, root);
-  for (const key in nextMovesList) {
-    if (nextMovesList[key] !== null) {
-      lookUpMoves(nextMovesList[key], arrMoves, dist);
-    }
-  }
+  let movesArr = [];
+  theDirtyWork(root, dist, movesArr);
 };
 
-function lookUpMoves(coord, arr, dis) {
-  if (arr.includes(coord.join(""))) {
-    return;
-  } else {
-    arr.push(coord.join(""));
+function theDirtyWork(_root, _dist, _movesArr) {
+  if (findArray(_dist, _movesArr)) {
+    _movesArr.push(_root);
+    return _movesArr;
   }
-  const nextMovesList2 = linkedBoard.find(linkedBoard.root, root);
+  if (compareCoor(_root, _dist)) {
+    _movesArr.push(_dist);
+    return _movesArr;
+  }
+  if (findArray(_root, garbageArr)) {
+    return "In Garbage";
+  } else {
+    garbageArr.push(_root);
+  }
+  console.log(`garbageArr:`);
+  console.log(garbageArr);
+  const movesList = linkedBoard.find(linkedBoard.root, _root);
+  const theList = Object.assign(movesList.nextMoves);
+  console.log(`copied: ${movesList.coord}`);
+  console.log(theList);
+  for (const key in theList) {
+    if (theList[key] !== null) {
+      console.log("the next Key:");
+      console.log(theList[key]);
+      return theDirtyWork(theList[key], _dist, _movesArr);
+    }
+  }
 }
+
+console.log(knightMoves([0, 0], [1, 2]));
