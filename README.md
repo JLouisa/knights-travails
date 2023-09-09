@@ -26,9 +26,7 @@ No additional dependencies are required for this project.
 3. Call the `knightMoves(root, dist)` function, where `root` is the starting position and `dist` is the destination position. The function will return the shortest path and display it in the console.
 
 Example:
-
-```javascript
-knightMoves([0, 0], [3, 3]);
+knightMoves([0, 0], [4, 1]);
 
 ## Functionality
 
@@ -55,6 +53,6 @@ knightMoves([0, 0], [3, 3]);
 - `findArray(find, list)`: Searches for an array within a list of arrays.
 - `convert2Num(arr)`: Converts string-ed arrays to number arrays.
 
-- License
+#### License
+
 This project is licensed under the MIT License - see the LICENSE file for details.
-```
