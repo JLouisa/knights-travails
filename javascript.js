@@ -7,6 +7,23 @@ const compareCoor = (coor1, coor2) => {
   } else return false;
 };
 
+//! Check for valid input
+const invalidInput = (coord1, coord2) => {
+  if (coord1.length > 2 || coord2.length > 2) return true;
+  if (
+    coord1[0] < 0 ||
+    coord1[0] > 7 ||
+    coord1[1] < 0 ||
+    coord1[1] > 7 ||
+    coord2[0] < 0 ||
+    coord2[0] > 7 ||
+    coord2[1] < 0 ||
+    coord2[1] > 7
+  ) {
+    return true;
+  } else return false;
+};
+
 //! This is to compare and traverse the tree easier (arg1 > arg2)
 //Compare which coordinate is bigger to traverse the BST
 const biggerCoord = (coor1, coor2) => {
@@ -159,6 +176,9 @@ function convert2Num(arr) {
 //! Knight Moves
 // This is the main core function for the app
 const knightMoves = (root, dist) => {
+  if (invalidInput(root, dist)) {
+    return "Sorry this in an invalid input";
+  }
   let shortArr = [];
   let visitedArr = [];
   let queue = [];
@@ -241,14 +261,31 @@ const knightMoves = (root, dist) => {
     }
   }
   // Return the shortArr after the loop finishes
+  console.log(`Only need ${shortArr.length} moves`);
   return shortArr.reverse();
 };
+
+const toBegin = (() => {
+  console.log(`To begin input knightMoves()`);
+  console.log(`Here is an example "knightMoves([0, 0], [1, 2])"`);
+  console.log(`With [0, 0] being where the Knight is`);
+  console.log(`and [1, 2] being where the Knight needs to go`);
+  console.log(`Valid input can only be positive number between and included 0 and 7`);
+})();
 
 // console.log(knightMoves([0, 0], [1, 2]));
 // console.log(knightMoves([0, 0], [3, 3]));
 // console.log(knightMoves([0, 0], [5, 4]));
 // console.log(knightMoves([0, 0], [5, 7]));
 // console.log(knightMoves([0, 0], [7, 7]));
-console.log(knightMoves([0, 0], [7, 6]));
+// console.log(knightMoves([0, 0], [7, 6]));
 // console.log(knightMoves([4, 0], [7, 4]));
 // console.log(knightMoves([4, 0], [4, 7]));
+// console.log(knightMoves([0, 2], [7, 5]));
+// console.log(knightMoves([3, 1], [6, 4]));
+// console.log(knightMoves([2, 0], [7, 3]));
+// console.log(knightMoves([1, 6], [4, 7]));
+// console.log(knightMoves([5, 0], [7, 2]));
+// console.log(knightMoves([0, 4], [6, 7]));
+// console.log(knightMoves([7, 7], [0, 3]));
+console.log(knightMoves([7, 7], [0, 1]));
