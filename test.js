@@ -1,64 +1,23 @@
-/*
-Question:
-Hey i'm asking about the knight travails project, 
-do we need to implement a graph? Because the lesson 
-just gave a single article on the data structure and 
-i don't think I can implement it with that little info, 
-or should I just do my own research on graphs?
-
-Answer:
-There's more than one way to represent a graph, 
-you don't need your graph to be real `nodes` and `vertices`, 
-you just need a way to treat your data in such a way that it's `nodes` and `vertices`.
-For example a 2X2 array can represent the following graph:
-```js
-0---0
-| X |
-0---0
-```
-a graph where every square is connected, 
-for example [0][0] is a node that's connected to those nodes (and vice versa):
-```js
-[0][0] -> [0][1]
- |     \
- V      V
-[1][0]   [1][1]
-```
-
-In the end is all about how **you** work with your data.
-*/
-
-// Starting point and Destination Input
-// All stops to and including Starting point & Destination Output
-// Every node === a position on the board
-// Every child node === a valid move for the Knight
-// Valid moves === 1 + 2 <= 7,7 || 2 + 1 <= 7,7 || 2 - 1 >= 0,0 || 1 - 2 >= 0,0
-// Root of tree is starting point of Knight
-// Legal moves: 0.0 <= 1.2 + 2.1 + 0.8 + 1.9 >= 7.7
-// 6 branches, but need to avoid infinite
-
-/*
-x = +2x / +1y
-y = +1x / +2y
-
-Node = {
-    coor: 1.2,
-    savedPiece: none,
-    nextPosX1: 1.2,  (+2, +1)
-    nextPosX2: null, (+2, -1)
-    nextPosY1: 2.1,  (+1, +2)
-    nextPosY2: null, (-1, +2)
-    nextNegY1: null, (+1, -2)
-    nextNegX1: null, (-2, +1)
-    nextNegX2: null, (-2, -1)
-    nextNegY2: null, (-1, -2)
-    previous: 0.0,
-}
-*/
-
 //! Compare coordinates
 const compareCoor = (coor1, coor2) => {
-  return coor1[0] === coor2[0] && coor1[1] === coor2[1];
+  if (coor1[0] === coor2[0] && coor1[1] === coor2[1]) {
+    return true;
+  } else return false;
+};
+
+//! This is to compare and traverse the tree easier (arg1 > arg2)
+const biggerCoord = (coor1, coor2) => {
+  if (coor1[0] > coor2[0]) {
+    return true;
+  } else if (coor1[0] < coor2[0]) {
+    return false;
+  } else if (coor1[0] === coor2[0]) {
+    if (coor1[1] > coor2[1]) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 };
 
 //! Create gameBoard Coordinate
@@ -85,11 +44,21 @@ class Node {
 //! Create gameBoard
 class GameBoard {
   constructor(arr) {
-    this.root = "Head";
-    this.leftNode = null;
-    this.rightNode = null;
-    this.prevNode = null;
-    this.coor = this.createChessBlocks(arr);
+    this.coord = "Head";
+    this.root = buildTree(arr, 0, arr.length - 1);
+  }
+  find(root, crd) {
+    if (root === null) {
+      return null;
+    }
+    if (compareCoor(root.coord, crd)) {
+      return root;
+    }
+    if (biggerCoord(crd, root.coord)) {
+      return this.find(root.rightNode, crd);
+    } else {
+      return this.find(root.leftNode, crd);
+    }
   }
 }
 
@@ -137,11 +106,86 @@ function calcNextCoord(pos, deltaXY) {
   return newPos[0] < 0 || newPos[0] > 7 || newPos[1] < 0 || newPos[1] > 7 ? null : newPos;
 }
 
+//! Visualize the tree in the console
+const prettyPrint = (node, prefix = "", isLeft = true) => {
+  if (node === null) {
+    return;
+  }
+  if (node.rightNode !== null) {
+    prettyPrint(node.rightNode, `${prefix}${isLeft ? "│   " : "    "}`, false);
+  }
+  console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.coord}`);
+  if (node.leftNode !== null) {
+    prettyPrint(node.leftNode, `${prefix}${isLeft ? "    " : "│   "}`, true);
+  }
+};
+
 const boardCoords = [...createGameCoord(coorXY)];
-// const linkedBoard = buildTree(boardCoords, 0, boardCoords.length - 1);
-// console.log(linkedBoard);
+const linkedBoard = new GameBoard(boardCoords);
+console.log(linkedBoard);
 
-const headNode = new Node(boardCoords[27]);
-console.log(headNode);
+// prettyPrint(linkedBoard.root);
+const list = linkedBoard.find(linkedBoard.root, [0, 0]);
+console.log(list);
 
-// console.log((test = new Node([2, 1])));
+//! Find Coordinates in the Array
+function findArray(find, list) {
+  const exists = list.some((item) => JSON.stringify(item) === JSON.stringify(find));
+  if (exists) {
+    // console.log("Array exists in the list.");
+    return true;
+  } else {
+    // console.log("Array does not exist in the list.");
+    return false;
+  }
+}
+
+//! knight Moves
+
+const knightMoves = (root, dist) => {
+  let shortArr = [];
+  let visitedArr = [];
+  let queue = [];
+  let holderArr = [];
+
+  //? Initial Setup //
+  shortArr.push(root);
+  // Get MovesList from root
+  let movesList = linkedBoard.find(linkedBoard.root, root);
+  let theList = Object.assign(movesList.nextMoves);
+  // Loop over the MoveList from root to get next moves
+  // and push it to the queue
+  for (const key in theList) {
+    if (theList[key] !== null /*&& findArray(theList[key], visited)*/) {
+      queue.push(theList[key]);
+    }
+  }
+
+  while (queue.length > 0) {
+    //Comparing the first in queue to the dist
+    let current = queue.shift();
+    console.log(current);
+    if (compareCoor(current, dist)) {
+      // Break loop after finding the dist in queue
+      console.log("found");
+      shortArr.push(current);
+      break;
+    } else {
+      console.log("not found");
+      visitedArr.push(current);
+    }
+    //Refilling the queue after parent is not equal to dist
+    movesList = linkedBoard.find(linkedBoard.root, current);
+    theList = Object.assign(movesList.nextMoves);
+    for (const key in theList) {
+      if (theList[key] !== null && !findArray(theList[key], visitedArr)) {
+        queue.push(theList[key]);
+      }
+    }
+  }
+
+  return shortArr; // Return the shortArr after the loop finishes
+};
+
+console.log(knightMoves([0, 0], [1, 2]));
+console.log(knightMoves([0, 0], [3, 3]));
