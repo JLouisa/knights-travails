@@ -1,7 +1,5 @@
 # knights-travails
 
-# Knight Travails
-
 Knight Travails is a JavaScript project that helps you find the shortest path for a knight on a chessboard to move from one position to another. It utilizes a Binary Search Tree (BST) structure to efficiently search for the shortest path and visualize the results.
 
 ## Table of Contents
