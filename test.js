@@ -1,6 +1,6 @@
 //! Compare coordinates
 const compareCoor = (coor1, coor2) => {
-  if (coor1[0] === coor2[0] && coor1[1] === coor2[1]) {
+  if (+coor1[0] === +coor2[0] && +coor1[1] === +coor2[1]) {
     return true;
   } else return false;
 };
@@ -140,52 +140,121 @@ function findArray(find, list) {
   }
 }
 
-//! knight Moves
+function CreateObject(propName, propValue, key) {
+  this[propName] = { propValue: key };
+}
+var myObj1 = new CreateObject("string1", "string2");
 
+//! Converted string-ed array to number array
+function convert2Num(arr) {
+  arr[0] = +arr[0];
+  arr[1] = +arr[1];
+  return arr;
+}
+
+//! knight Moves
 const knightMoves = (root, dist) => {
   let shortArr = [];
   let visitedArr = [];
   let queue = [];
   let holderArr = [];
+  let returnArr = [];
+  let temp = {};
 
   //? Initial Setup //
-  shortArr.push(root);
   // Get MovesList from root
   let movesList = linkedBoard.find(linkedBoard.root, root);
   let theList = Object.assign(movesList.nextMoves);
   // Loop over the MoveList from root to get next moves
   // and push it to the queue
   for (const key in theList) {
-    if (theList[key] !== null /*&& findArray(theList[key], visited)*/) {
+    if (theList[key] !== null) {
       queue.push(theList[key]);
+      holderArr.push(theList[key]);
+      console.log(theList[key]);
     }
   }
+  temp[movesList.coord] = [...holderArr];
+  holderArr = [];
+  console.log(`1st temp`);
+  console.log(temp);
 
+  // Start looping through the queue
   while (queue.length > 0) {
-    //Comparing the first in queue to the dist
+    // Comparing the first in queue to the dist
     let current = queue.shift();
-    console.log(current);
+    // console.log(`current`);
+    // console.log(current);
     if (compareCoor(current, dist)) {
       // Break loop after finding the dist in queue
       console.log("found");
-      shortArr.push(current);
+      console.log(current);
+      visitedArr.push(current);
       break;
+      // If not equal, push to visisted array
     } else {
       console.log("not found");
       visitedArr.push(current);
     }
-    //Refilling the queue after parent is not equal to dist
+    // Refilling the queue after parent is not equal to dist
     movesList = linkedBoard.find(linkedBoard.root, current);
     theList = Object.assign(movesList.nextMoves);
+
     for (const key in theList) {
+      // To stop infinite loop
       if (theList[key] !== null && !findArray(theList[key], visitedArr)) {
         queue.push(theList[key]);
+        holderArr.push(theList[key]);
       }
     }
+    // Create object to hold Parent Coords with their moves
+    temp[movesList.coord] = [...holderArr];
+    holderArr = [];
   }
+  console.log(`temp`);
+  console.log(temp);
+  // console.log(Object.keys(temp));
 
-  return shortArr; // Return the shortArr after the loop finishes
+  //Find where the coordinates came from
+  let searchPoint = visitedArr.pop();
+  returnArr.push(searchPoint);
+  let z = 5;
+  let x = false;
+  console.log(`searchPoint`);
+  console.log(searchPoint);
+  console.log(`While Loop start <------------`);
+  while (!compareCoor(searchPoint, root)) {
+    x = false;
+    console.log(`reset`);
+    for (const key in temp) {
+      if (x === true) {
+        console.log(`broken`);
+        break;
+      }
+      console.log(key);
+      console.log(temp[key]);
+      if (findArray(searchPoint, temp[key])) {
+        console.log(`Before searchPoint`);
+        console.log(searchPoint);
+        searchPoint = key.split(",");
+        searchPoint = convert2Num(searchPoint);
+        returnArr.push(searchPoint);
+        console.log(`new searchPoint`);
+        console.log(searchPoint);
+        x = true;
+        break;
+      }
+    }
+    z--;
+    if (z < 0) {
+      break;
+    }
+  }
+  console.log(`knightMoves`);
+  return returnArr; // Return the shortArr after the loop finishes
 };
 
-console.log(knightMoves([0, 0], [1, 2]));
+// console.log(knightMoves([0, 0], [1, 2]));
 console.log(knightMoves([0, 0], [3, 3]));
+// console.log(knightMoves([0, 0], [5, 4]));
+// console.log(knightMoves([0, 0], [5, 7]));
