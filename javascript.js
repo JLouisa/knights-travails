@@ -261,7 +261,7 @@ const knightMoves = (root, dist) => {
     }
   }
   // Return the shortArr after the loop finishes
-  console.log(`=> You made it in ${shortArr.length} moves moves! Here's your path: `);
+  console.log(`=> You made it in ${shortArr.length - 1} move(s)! Here's your path: `);
   return shortArr.reverse().forEach((n) => console.log(n));
 };
 
