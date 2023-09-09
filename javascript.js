@@ -1,4 +1,6 @@
 //! Compare coordinates
+// Can compare string to numbers also because
+// Object.key returns strings
 const compareCoor = (coor1, coor2) => {
   if (+coor1[0] === +coor2[0] && +coor1[1] === +coor2[1]) {
     return true;
@@ -6,6 +8,7 @@ const compareCoor = (coor1, coor2) => {
 };
 
 //! This is to compare and traverse the tree easier (arg1 > arg2)
+//Compare which coordinate is bigger to traverse the BST
 const biggerCoord = (coor1, coor2) => {
   if (coor1[0] > coor2[0]) {
     return true;
@@ -27,7 +30,6 @@ class Node {
     this.savedPiece = null;
     this.leftNode = null;
     this.rightNode = null;
-    this.prevNode = null;
     this.nextMoves = {
       nextPosX1: calcNextCoord(coord, posX1),
       nextPosX2: calcNextCoord(coord, posX2),
@@ -47,6 +49,7 @@ class GameBoard {
     this.coord = "Head";
     this.root = buildTree(arr, 0, arr.length - 1);
   }
+  // Use to find coordinates in the BST and return the node
   find(root, crd) {
     if (root === null) {
       return null;
@@ -63,6 +66,7 @@ class GameBoard {
 }
 
 //! Create coordinate Array
+//Creates the board 8x8 with one array
 const createGameCoord = (arrXY) => {
   let newArr = [];
   arrXY.forEach((coordX) => {
@@ -101,6 +105,7 @@ const negX2 = [-2, -1];
 const negY2 = [-1, -2];
 
 //! Calculate Next Coordinate
+// Using this algorithm to add neighbour Moves for the nodes
 function calcNextCoord(pos, deltaXY) {
   const newPos = [pos[0] + deltaXY[0], pos[1] + deltaXY[1]];
   return newPos[0] < 0 || newPos[0] > 7 || newPos[1] < 0 || newPos[1] > 7 ? null : newPos;
@@ -119,14 +124,20 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
     prettyPrint(node.leftNode, `${prefix}${isLeft ? "    " : "│   "}`, true);
   }
 };
+//! Initialize the tree in the console
+// prettyPrint(linkedBoard.root);
 
+//! Initialize the board Coordinates
 const boardCoords = [...createGameCoord(coorXY)];
+
+//! Initialize the BST tree
 const linkedBoard = new GameBoard(boardCoords);
 
-// prettyPrint(linkedBoard.root);
 const list = linkedBoard.find(linkedBoard.root, [0, 0]);
 
-//! Find Coordinates in the Array
+//! Find Coordinates in an Array
+// This will help find a coordinates (which is an array)
+// in a list of arrays
 function findArray(find, list) {
   const exists = list.some((item) => JSON.stringify(item) === JSON.stringify(find));
   if (exists) {
@@ -136,19 +147,17 @@ function findArray(find, list) {
   }
 }
 
-function CreateObject(propName, propValue, key) {
-  this[propName] = { propValue: key };
-}
-var myObj1 = new CreateObject("string1", "string2");
-
 //! Converted string-ed array to number array
+// Used because Object.key returns strings
+// While coordinates are in numbers
 function convert2Num(arr) {
   arr[0] = +arr[0];
   arr[1] = +arr[1];
   return arr;
 }
 
-//! knight Moves
+//! Knight Moves
+// This is the main core function for the app
 const knightMoves = (root, dist) => {
   let shortArr = [];
   let visitedArr = [];
@@ -192,18 +201,18 @@ const knightMoves = (root, dist) => {
     theList = Object.assign(movesList.nextMoves);
 
     for (const key in theList) {
-      // To stop infinite loop
+      // To stop infinite loop by not adding key that's already been compared
       if (theList[key] !== null && !findArray(theList[key], visitedArr)) {
         queue.push(theList[key]);
         holderArr.push(theList[key]);
       }
     }
-    // Create object to hold Parent Coords with their moves
+    // Create object to hold Parent Coordinates with their moves
     temp[movesList.coord] = [...holderArr];
     holderArr = [];
   }
 
-  //Find where the coordinates came from
+  // Find where the coordinates came from
   let searchPoint = visitedArr.pop();
   shortArr.push(searchPoint);
   let x = false;
@@ -231,7 +240,8 @@ const knightMoves = (root, dist) => {
       }
     }
   }
-  return shortArr.reverse(); // Return the shortArr after the loop finishes
+  // Return the shortArr after the loop finishes
+  return shortArr.reverse();
 };
 
 // console.log(knightMoves([0, 0], [1, 2]));
