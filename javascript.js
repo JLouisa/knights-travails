@@ -261,7 +261,7 @@ const knightMoves = (root, dist) => {
     }
   }
   // Return the shortArr after the loop finishes
-  console.log(`Only need ${shortArr.length} moves`);
+  console.log(`=> You made it in 3 ${shortArr.length} moves moves! Here's your path: `);
   return shortArr.reverse();
 };
 
@@ -270,7 +270,8 @@ const toBegin = (() => {
   console.log(`Here is an example "knightMoves([0, 0], [1, 2])"`);
   console.log(`With [0, 0] being where the Knight is`);
   console.log(`and [1, 2] being where the Knight needs to go`);
-  console.log(`Valid input can only be positive number between and included 0 and 7`);
+  console.log(`Valid input can only be positive number `);
+  console.log(`between and including 0 and 7`);
 })();
 
 // console.log(knightMoves([0, 0], [1, 2]));
@@ -288,4 +289,4 @@ const toBegin = (() => {
 // console.log(knightMoves([5, 0], [7, 2]));
 // console.log(knightMoves([0, 4], [6, 7]));
 // console.log(knightMoves([7, 7], [0, 3]));
-console.log(knightMoves([7, 7], [0, 1]));
+// console.log(knightMoves([7, 7], [0, 1]));
